@@ -39,16 +39,21 @@ def process_user(username):
     # For parameters, see https://www.mediawiki.org/wiki/API%3aUsercontribs
     ucpayload = {
             'list': 'usercontribs',
-            'ucprop': 'sizediff',
+            'ucprop': 'sizediff|timestamp|ids|title',
             'ucuser': username,
             'uclimit': 100,
-            'ucnamespace': MAINSPACE,
+            # 'ucnamespace': MAINSPACE,
             # 'ucdir': 'older',
             # 'ucshow': 'new',
     }
     for result in util.query(ucpayload, sleep=0):
         for i in result['usercontribs']:
-            print(i['sizediff'])
+            print("\t".join([
+                i['ns'],
+                i['timestamp'],
+                i['sizediff'],
+                i['ns'],
+            ]))
 
     # if user_prefix:
     #     appayload = {
