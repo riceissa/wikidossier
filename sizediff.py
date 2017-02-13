@@ -48,13 +48,15 @@ def process_user(username):
     }
     for result in util.query(ucpayload, sleep=0):
         for i in result['usercontribs']:
-            if i:
+            try:
                 print("\t".join(map(str, [
                     username,
                     i['ns'],
                     i['timestamp'],
                     i['sizediff'],
                 ])))
+            except Exception as e:
+                logging.warning("Something went wrong: %s", e)
 
     # if user_prefix:
     #     appayload = {
