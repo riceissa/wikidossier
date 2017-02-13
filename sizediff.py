@@ -48,12 +48,12 @@ def process_user(username):
     }
     for result in util.query(ucpayload, sleep=0):
         for i in result['usercontribs']:
-            print("\t".join([
+            print("\t".join(map(str, [
+                username,
                 i['ns'],
                 i['timestamp'],
                 i['sizediff'],
-                i['ns'],
-            ]))
+            ])))
 
     # if user_prefix:
     #     appayload = {
