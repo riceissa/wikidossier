@@ -21,6 +21,7 @@ def plot_user_cumsum_sizediff(u):
                     label=util.NAMESPACES_INV_MAP[i],
                     legend=True,
                     title=u)
+    plt.legend(bbox_to_anchor=(0.5, -0.08), loc='upper center', ncol=3)
 
 def plot_all_users_cumsum_sizediff(ns):
     '''
