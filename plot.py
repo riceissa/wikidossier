@@ -36,7 +36,9 @@ def plot_all_users_cumsum_sizediff(ns):
 
 def plot_punchcard(df, normalize=None):
     '''
-    Plot the punchcard (sometimes called "time card") for DataFrame df.
+    Plot the punchcard (sometimes called "time card") for DataFrame df. If
+    normalize is passed, the normalized area of the dots will be scaled by
+    normalize.
     '''
     g = df.groupby([df.index.hour, df.index.dayofweek]).size()
     # Fill in sizes of the dots
