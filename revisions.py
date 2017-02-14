@@ -46,7 +46,9 @@ def process_page(pagename):
                         r['size'],
                     ])))
         except Exception as e:
-            logging.warning("Something went wrong %s: %s", e.__class__.__name__, e)
+            logging.warning("Something went wrong for page %s; %s: %s",
+                    pagename, e.__class__.__name__, e)
+            logging.warning(str(result))
 
 if __name__ == "__main__":
     main()
