@@ -52,7 +52,9 @@ def process_user(username):
                     i['sizediff'],
                 ])))
             except Exception as e:
-                logging.warning("Something went wrong: %s", e)
+                logging.warning("Something went wrong for user %s; %s: %s",
+                        username, e.__class__.__name__, e)
+                logging.warning(str(i))
 
 def plot_from(path, user, limit=10000000, minlimit=0):
     lst = []
