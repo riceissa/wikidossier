@@ -38,9 +38,6 @@ def process_user(username):
             'ucprop': 'sizediff|timestamp|ids|title',
             'ucuser': username,
             'uclimit': 100,
-            # 'ucnamespace': MAINSPACE,
-            # 'ucdir': 'older',
-            # 'ucshow': 'new',
     }
     for result in util.query(ucpayload, sleep=0):
         for i in result['usercontribs']:
