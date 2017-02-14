@@ -21,3 +21,10 @@ def plot_user_cumsum_sizediff(u):
                     label=util.NAMESPACES_INV_MAP[i],
                     legend=True,
                     title=u)
+
+def plot_all_users_cumsum_sizediff(ns):
+    '''
+    Plot the cumulative sum of sizediff as timeseries for namespace ns.
+    '''
+    for key, g in ts_df[ts_df.ns == ns].groupby('username').sizediff:
+        g.cumsum().plot(legend=True, label=key)
