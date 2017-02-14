@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 
 import util
 
-df = pd.read_csv("contribs.tsv", sep="\t")
+df = pd.read_csv("big_contribs.tsv", sep="\t")
 df['timestamp'] = pd.to_datetime(df['timestamp'])
 ts_df = df.set_index('timestamp').sort_index()
 ts_df['ns_str'] = ts_df.ns.map(lambda x: util.NAMESPACES_INV_MAP[x])
@@ -27,4 +27,6 @@ def plot_all_users_cumsum_sizediff(ns):
     Plot the cumulative sum of sizediff as timeseries for namespace ns.
     '''
     for key, g in ts_df[ts_df.ns == ns].groupby('username').sizediff:
-        g.cumsum().plot(legend=True, label=key)
+        gcs = g.cumsum()
+        gcs.plot(legend=False, label=key)
+        plt.text(g.index.values[-1], gcs[-1], key)
