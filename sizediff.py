@@ -54,17 +54,6 @@ def process_user(username):
             except Exception as e:
                 logging.warning("Something went wrong: %s", e)
 
-    # if user_prefix:
-    #     appayload = {
-    #             'list': 'allpages',
-    #             'aplimit': 100,
-    #             'apprefix': username + '/',
-    #             'apnamespace': USERSPACE,
-    #     }
-    #     for result in util.query(appayload):
-    #         for i in result['allpages']:
-    #             print(i['title'])
-
 def plot_from(path, user, limit=10000000, minlimit=0):
     lst = []
     with open(path, "r") as f:
