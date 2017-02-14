@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 
 import util
@@ -31,3 +32,25 @@ def plot_all_users_cumsum_sizediff(ns):
         gcs = g.cumsum()
         gcs.plot(legend=False, label=key)
         plt.text(g.index.values[-1], gcs[-1], key)
+
+def plot_punchcard(df, normalize=None):
+    '''
+    Plot the punchcard (sometimes called "time card") for DataFrame df.
+    '''
+    g = df.groupby([df.index.hour, df.index.dayofweek]).size()
+    # Fill in sizes of the dots
+    sizes = []
+    for hour in range(24):
+        for week in range(7):
+            if hour in g and week in g[hour]:
+                sizes.append(g[hour][week])
+            else:
+                sizes.append(0)
+    if normalize:
+        sizes = np.divide(sizes, g.max()) * normalize
+    # The order of plotting the points is (h=0, w=0), (h=0, w=1), and so on
+    plt.scatter(
+        [h for h in range(24) for w in range(7)],
+        list(range(7))*24,
+        s=sizes
+    )
