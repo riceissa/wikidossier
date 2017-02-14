@@ -34,16 +34,19 @@ def process_page(pagename):
             'rvlimit': 100,
     }
     for result in util.query(payload, sleep=0):
-        # There should only be one thing here, but it's the page id, so let's
-        # iterate
-        for _, v in result['pages'].items():
-            assert pagename == v['title']
-            for r in v['revisions']:
-                print("\t".join(map(str, [
-                    pagename,
-                    v['timestamp'],
-                    v['size'],
-                ])))
+        try:
+            # There should only be one thing here, but it's the page id, so
+            # let's iterate
+            for _, v in result['pages'].items():
+                assert pagename == v['title']
+                for r in v['revisions']:
+                    print("\t".join(map(str, [
+                        pagename,
+                        v['timestamp'],
+                        v['size'],
+                    ])))
+        except Exception as e:
+            logging.warning("Something went wrong: %s", e)
 
 if __name__ == "__main__":
     main()
