@@ -42,11 +42,11 @@ def process_page(pagename):
                 for r in v['revisions']:
                     print("\t".join(map(str, [
                         pagename,
-                        v['timestamp'],
-                        v['size'],
+                        r['timestamp'],
+                        r['size'],
                     ])))
         except Exception as e:
-            logging.warning("Something went wrong: %s", e)
+            logging.warning("Something went wrong %s: %s", e.__class__.__name__, e)
 
 if __name__ == "__main__":
     main()
