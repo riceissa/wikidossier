@@ -10,6 +10,7 @@ df = pd.read_csv("big_contribs.tsv", sep="\t")
 df['timestamp'] = pd.to_datetime(df['timestamp'])
 ts_df = df.set_index('timestamp').sort_index()
 ts_df['ns_str'] = ts_df.ns.map(lambda x: util.NAMESPACES_INV_MAP[x])
+# df = ts_df.set_index(ts_df.index.tz_localize('UTC').tz_convert('US/Pacific'))
 
 def plot_user_cumsum_sizediff(u):
     '''
@@ -54,3 +55,5 @@ def plot_punchcard(df, normalize=None):
         list(range(7))*24,
         s=sizes
     )
+    plt.yticks(list(range(7)), ['Monday', 'Tuesday', 'Wednesday',
+        'Thursday', 'Friday', 'Saturday', 'Sunday'])
