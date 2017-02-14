@@ -12,16 +12,12 @@ USERSPACE = 2
 USERTALKSPACE = 3
 
 def main():
-    parser = argparse.ArgumentParser(description="Print Wikipedia pages " +
-            "that are related to users.")
-    parser.add_argument("--created", action="store_true",
-            help="print pages created by the users")
-    parser.add_argument("--user_prefix", action="store_true",
-            help="print pages with users' prefix")
+    parser = argparse.ArgumentParser(description="Generate a TSV " +
+            "about the given users' contributions.")
     parser.add_argument("usersfile", nargs="?", type=argparse.FileType("r"),
             default=sys.stdin, help="file containing list of usernames " +
             "for which to " +
-            "print the requested pages, one username per line; reads " +
+            "print contributions, one username per line; reads " +
             "from stdin if not given")
     parser.add_argument("--debug", help="print debug statements",
             action="store_const", dest="loglevel", const=logging.DEBUG,
