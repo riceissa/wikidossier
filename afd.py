@@ -1,6 +1,29 @@
 import re
+import requests
+import logging
+import util
 
-def get_votes(wikitext, normalize=True):
+def get_afd_list(title="User:Cyberbot I/Current AfD's", lang="en"):
+    '''
+    Return a list of AfDs by parsing the wikitext of title.
+    '''
+    payload = {
+            'action': 'parse',
+            'format': 'json',
+            'contentmodel': 'wikitext',
+            'page': title,
+    }
+    r = requests.get('http://{}.wikipedia.org/w/api.php'.format(lang),
+            params=payload, headers=util.HEADERS)
+    j = r.json()
+    result = []
+    for link in j.get('parse', {}).get('links', {}):
+        t = link.get('*', "")
+        if t.startswith("Wikipedia:Articles for deletion/"):
+            result.append(t)
+    return result
+
+def votes(wikitext, normalize=True):
     '''
     Given the wikitext of an AfD page, return a list of tuples (vote, username)
     for votes in the AfD.
