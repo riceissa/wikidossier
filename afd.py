@@ -88,10 +88,11 @@ def votes(wikitext, normalize=True):
     # Remove all parts tagged as strikeouts
     wikitext = re.sub("<(s|strike|del)>.*?</(s|strike|del)>", "", wikitext,
             flags=re.IGNORECASE|re.DOTALL)
-    votes = re.findall(
-            "\*[ ]*'''(.*?)'''" # capture the vote
-            + ".*?\[\[User.*?:(.*?)(?:\|.*?)?\]\]" # capture username
-            + ".*?\(UTC\)", wikitext, flags=re.IGNORECASE)
+    votes = re.findall(r"""
+            ^\*?[ ]*'''(.*?)''' # capture the vote
+            .*?\[\[User[^[\]]*?:([^[\]]*?)(?:\|[^[\]]*?)?\]\] # capture username
+            [^[\]]*?\(UTC\)""", wikitext,
+            flags=re.VERBOSE|re.IGNORECASE|re.MULTILINE)
     if normalize:
         # Just some rudimentary normalization for now
         votes = [(v.lower(), u) for v, u in votes]
