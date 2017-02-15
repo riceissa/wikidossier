@@ -3,15 +3,25 @@
 import time
 import requests
 import sys
+import os.path
 import logging
 from itertools import zip_longest
 
-HEADERS = {
-        'User-Agent': 'WikipediaArchive/0.1 ' +
-            '(https://exp.issarice.com/wikipedia-archive.txt; ' +
-            'riceissa@gmail.com) ' +
-            'BasedOnpython-requests/' + str(requests.__version__),
-}
+ua_file = "user-agent.txt"
+if os.path.isfile(ua_file):
+    with open(ua_file, "r") as f:
+        try:
+            ua = next(f).strip()
+        except Exception as e:
+            logging.warning("Couldn't read user agents file; " +
+                "make sure you have at least one line of text in " +
+                ua_file)
+            ua = ""
+    HEADERS = {
+        'User-Agent': ua + ' BasedOnpython-requests/' + str(requests.__version__),
+    }
+else:
+    HEADERS = {}
 
 NAMESPACES_MAP = {
         "Main": 0,
