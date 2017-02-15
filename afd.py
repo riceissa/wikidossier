@@ -14,6 +14,13 @@ def get_afd_list(title="User:Cyberbot I/Current AfD's", exclude_logs=False,
         lang="en"):
     '''
     Return a list of AfDs by parsing the wikitext of title.
+
+    The default title string, "User:Cyberbot I/Current AfD's", is just a page
+    that lists all the currently-running AfDs. Another page that is useful as a
+    starting point is "Wikipedia:Articles for deletion/Log", which links out to
+    all the daily logs, so run once with exclude_logs=False to get all the
+    daily log pages, then loop over each of the resulting titles and run with
+    exclude_logs=True to get a list of all the actual discussion pages.
     '''
     payload = {
             'action': 'parse',
