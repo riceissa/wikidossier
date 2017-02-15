@@ -47,13 +47,16 @@ def get_nominator(title, lang="en"):
     }
     for result in util.query(payload, sleep=0):
         try:
-            # There should only be one thing here, but it's the page id, so
-            # let's iterate
-            for _, v in result['pages'].items():
-                assert title == v['title']
-                assert len(v['revisions']) == 1
-                for r in v['revisions']:
-                    return r['user']
+            # We only requested one page, so just retrieve that from the mess
+            # of JSON
+            assert len(result['pages']) == 1
+            v = list(result['pages'].values())[0]
+
+            # Again, we only requested one revision, so just get the username
+            # from that
+            assert title == v['title']
+            assert len(v['revisions']) == 1
+            return v['revisions'][0]['user']
         except Exception as e:
             logging.warning("Something went wrong for page %s; %s: %s",
                     title, e.__class__.__name__, e)
