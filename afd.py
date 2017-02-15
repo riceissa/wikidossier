@@ -11,6 +11,7 @@ def get_afd_list(title="User:Cyberbot I/Current AfD's", lang="en"):
             'action': 'parse',
             'format': 'json',
             'contentmodel': 'wikitext',
+            'prop': 'links',
             'page': title,
     }
     r = requests.get('http://{}.wikipedia.org/w/api.php'.format(lang),
@@ -22,6 +23,22 @@ def get_afd_list(title="User:Cyberbot I/Current AfD's", lang="en"):
         if t.startswith("Wikipedia:Articles for deletion/"):
             result.append(t)
     return result
+
+def get_page(title):
+    '''
+    Return the wikitext of title.
+    '''
+    payload = {
+            'action': 'parse',
+            'format': 'json',
+            'contentmodel': 'wikitext',
+            'prop': 'wikitext',
+            'page': title,
+    }
+    r = requests.get('http://{}.wikipedia.org/w/api.php'.format(lang),
+            params=payload, headers=util.HEADERS)
+    j = r.json()
+    return j.get('parse', {}).get('wikitext', "")
 
 def votes(wikitext, normalize=True):
     '''
