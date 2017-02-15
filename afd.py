@@ -3,6 +3,13 @@ import requests
 import logging
 import util
 
+'''
+Sample usage:
+
+>>> m = map(votes, map(get_page, get_afd_list()))
+>>> all_votes = list(m)
+'''
+
 def get_afd_list(title="User:Cyberbot I/Current AfD's", lang="en"):
     '''
     Return a list of AfDs by parsing the wikitext of title.
