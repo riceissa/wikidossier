@@ -1,5 +1,7 @@
 # Wikidossier – Tools to stalk Wikipedia users and pages
 
+## List of scripts
+
 * `sizediff.py`: This script uses the MediaWiki API to obtain revisions by
   username, and stores it as a TSV. The columns are "username", "ns" (namespace
   number), "timestamp", and "sizediff" (difference in bytes of the page before
@@ -14,7 +16,7 @@
   plots them.
 * `print_page.py`: TODO say something about this.
 
-# Notes
+## Notes
 
 To filter out "strange" page titles, I used
 
