@@ -12,6 +12,16 @@ import util
 # ts_df['ns_str'] = ts_df.ns.map(lambda x: util.NAMESPACES_INV_MAP[x])
 # df = ts_df.set_index(ts_df.index.tz_localize('UTC').tz_convert('US/Pacific'))
 
+def plot_from(path, user, limit=10000000, minlimit=0):
+    lst = []
+    with open(path, "r") as f:
+        for line in f:
+            lst.append(int(line.strip()))
+    plot_lst = [i for i in lst if abs(i) < limit and abs(i) > minlimit]
+    plt.hist(plot_lst, bins=50)
+    plt.title(user + " sizediff histogram,\n" + "limit=" + str(limit) + ", minlimit=" + str(minlimit) + ", showing {} edits".format(len(plot_lst)))
+    plt.show()
+
 def plot_user_cumsum_sizediff(u):
     '''
     Plot the cumulative sum of sizediff as timeseries for user u.

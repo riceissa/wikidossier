@@ -53,15 +53,5 @@ def process_user(username):
                         username, e.__class__.__name__, e)
                 logging.warning(str(i))
 
-def plot_from(path, user, limit=10000000, minlimit=0):
-    lst = []
-    with open(path, "r") as f:
-        for line in f:
-            lst.append(int(line.strip()))
-    plot_lst = [i for i in lst if abs(i) < limit and abs(i) > minlimit]
-    plt.hist(plot_lst, bins=50)
-    plt.title(user + " sizediff histogram,\n" + "limit=" + str(limit) + ", minlimit=" + str(minlimit) + ", showing {} edits".format(len(plot_lst)))
-    plt.show()
-
 if __name__ == "__main__":
     main()
