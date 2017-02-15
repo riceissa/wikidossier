@@ -24,7 +24,7 @@ def get_afd_list(title="User:Cyberbot I/Current AfD's", lang="en"):
             result.append(t)
     return result
 
-def get_page(title):
+def get_page(title, lang="en"):
     '''
     Return the wikitext of title.
     '''
@@ -38,7 +38,7 @@ def get_page(title):
     r = requests.get('http://{}.wikipedia.org/w/api.php'.format(lang),
             params=payload, headers=util.HEADERS)
     j = r.json()
-    return j.get('parse', {}).get('wikitext', "")
+    return j.get('parse', {}).get('wikitext', {}).get('*', "")
 
 def votes(wikitext, normalize=True):
     '''
