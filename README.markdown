@@ -8,3 +8,7 @@ To filter out "strange" page titles, I used
 in Vim, to find characters not in a whitelist, and then deleting all lines with
 characters outside of that list.
 We can work out something better later.
+
+## License
+
+CC0; see `LICENSE` for the full text.
