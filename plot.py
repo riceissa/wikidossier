@@ -19,7 +19,9 @@ def plot_from(path, user, limit=10000000, minlimit=0):
             lst.append(int(line.strip()))
     plot_lst = [i for i in lst if abs(i) < limit and abs(i) > minlimit]
     plt.hist(plot_lst, bins=50)
-    plt.title(user + " sizediff histogram,\n" + "limit=" + str(limit) + ", minlimit=" + str(minlimit) + ", showing {} edits".format(len(plot_lst)))
+    plt.title(user + " sizediff histogram,\n" + "limit=" + str(limit) +
+            ", minlimit=" + str(minlimit) +
+            ", showing {} edits".format(len(plot_lst)))
     plt.show()
 
 def plot_user_cumsum_sizediff(u):
