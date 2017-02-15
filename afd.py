@@ -10,7 +10,8 @@ Sample usage:
 >>> all_votes = list(m)
 '''
 
-def get_afd_list(title="User:Cyberbot I/Current AfD's", lang="en"):
+def get_afd_list(title="User:Cyberbot I/Current AfD's", exclude_logs=False,
+        lang="en"):
     '''
     Return a list of AfDs by parsing the wikitext of title.
     '''
@@ -27,8 +28,13 @@ def get_afd_list(title="User:Cyberbot I/Current AfD's", lang="en"):
     result = []
     for link in j.get('parse', {}).get('links', {}):
         t = link.get('*', "")
-        if t.startswith("Wikipedia:Articles for deletion/"):
-            result.append(t)
+        if exclude_logs:
+            if (t.startswith("Wikipedia:Articles for deletion/") and
+                    not t.startswith("Wikipedia:Articles for deletion/Log/")):
+                result.append(t)
+        else:
+            if t.startswith("Wikipedia:Articles for deletion/"):
+                result.append(t)
     return result
 
 def get_nominator(title, lang="en"):
