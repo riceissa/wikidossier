@@ -6,11 +6,6 @@ import logging
 
 import util
 
-MAINSPACE = 0
-TALKSPACE = 1
-USERSPACE = 2
-USERTALKSPACE = 3
-
 def main():
     parser = argparse.ArgumentParser(description="Generate a TSV " +
             "about the given users' contributions.")
