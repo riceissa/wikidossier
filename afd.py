@@ -31,6 +31,34 @@ def get_afd_list(title="User:Cyberbot I/Current AfD's", lang="en"):
             result.append(t)
     return result
 
+def get_nominator(title, lang="en"):
+    '''
+    Return the username of the nominator of the AfD given by title. For the
+    purposes of this function, we assume that "nominator of the AfD" is the
+    same as the user that creates the AfD (i.e. the user that creates the
+    page).
+    '''
+    payload = {
+            'prop': 'revisions',
+            'titles': title,
+            'rvprop': 'user',
+            'rvlimit': 1,       # We only care about the first edit
+            'rvdir': 'newer',   #   to the page
+    }
+    for result in util.query(payload, sleep=0):
+        try:
+            # There should only be one thing here, but it's the page id, so
+            # let's iterate
+            for _, v in result['pages'].items():
+                assert title == v['title']
+                assert len(v['revisions']) == 1
+                for r in v['revisions']:
+                    return r['user']
+        except Exception as e:
+            logging.warning("Something went wrong for page %s; %s: %s",
+                    title, e.__class__.__name__, e)
+            logging.warning(str(result))
+
 def get_page(title, lang="en"):
     '''
     Return the wikitext of title.
