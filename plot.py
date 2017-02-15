@@ -59,3 +59,5 @@ def plot_punchcard(df, normalize=None):
     )
     plt.yticks(list(range(7)), ['Monday', 'Tuesday', 'Wednesday',
         'Thursday', 'Friday', 'Saturday', 'Sunday'])
+    label_hrs = list(range(0, 24, 2))
+    plt.xticks(label_hrs, label_hrs)
