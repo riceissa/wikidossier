@@ -6,10 +6,10 @@ import matplotlib.pyplot as plt
 
 import util
 
-df = pd.read_csv("big_contribs.tsv", sep="\t")
-df['timestamp'] = pd.to_datetime(df['timestamp'])
-ts_df = df.set_index('timestamp').sort_index()
-ts_df['ns_str'] = ts_df.ns.map(lambda x: util.NAMESPACES_INV_MAP[x])
+# df = pd.read_csv("big_contribs.tsv", sep="\t")
+# df['timestamp'] = pd.to_datetime(df['timestamp'])
+# ts_df = df.set_index('timestamp').sort_index()
+# ts_df['ns_str'] = ts_df.ns.map(lambda x: util.NAMESPACES_INV_MAP[x])
 # df = ts_df.set_index(ts_df.index.tz_localize('UTC').tz_convert('US/Pacific'))
 
 def plot_user_cumsum_sizediff(u):
