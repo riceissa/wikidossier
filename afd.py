@@ -6,8 +6,15 @@ import util
 '''
 Sample usage:
 
->>> m = map(votes, map(get_page, get_afd_list()))
->>> all_votes = list(m)
+>>> import afd
+>>> lst = afd.get_afd_list()
+>>> a = afd.AfD(lst[0])
+>>> a.title
+'Wikipedia:Articles for deletion/1998 Piruetten'
+>>> a.get_nominator()
+'Sportsfan 1234'
+>>> afd.votes(a.get_page())
+[(None, 'Gab4gab'), ('keep', 'Hergilei'), ('keep', 'Smartyllama')]
 '''
 
 def get_afd_list(title="User:Cyberbot I/Current AfD's", exclude_logs=False,
