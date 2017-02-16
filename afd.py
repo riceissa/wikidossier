@@ -57,20 +57,22 @@ def print_afd_votes(start=datetime.datetime(2004, 12, 25)):
         for title in lst:
             if title not in seen:
                 a = AfD(title)
-                # Nominator counts as a "delete" vote
-                print("\t".join([
-                    a.title,
-                    log2datestr(log),
-                    a.get_nominator(),
-                    "delete"
-                ]))
-                for v, u in a.get_votes():
+                nominator = a.get_nominator()
+                if nominator is not None:
+                    # Nominator counts as a "delete" vote
                     print("\t".join([
                         a.title,
                         log2datestr(log),
-                        u,
-                        str(v)
+                        nominator,
+                        "delete"
                     ]))
+                    for v, u in a.get_votes():
+                        print("\t".join([
+                            a.title,
+                            log2datestr(log),
+                            u,
+                            str(v)
+                        ]))
             seen.add(title)
 
 def get_afd_list(title="User:Cyberbot I/Current AfD's", exclude_logs=False,
