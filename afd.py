@@ -18,13 +18,13 @@ Sample usage:
 [(None, 'Gab4gab'), ('keep', 'Hergilei'), ('keep', 'Smartyllama')]
 '''
 
-def title_generator(start=datetime.datetime(2004, 12, 25),
+def log_generator(start=datetime.datetime(2004, 12, 25),
         end=datetime.datetime.today()):
     '''
     Yield a generator that returns all Wikipedia "Articles for deletion" daily
     log pages in order between start and end (inclusive).
 
-    >>> g = title_generator()
+    >>> g = log_generator()
     >>> next(g)
     'Wikipedia:Articles for deletion/Log/2004 December 25'
     '''
@@ -34,16 +34,47 @@ def title_generator(start=datetime.datetime(2004, 12, 25),
         yield title_prefix + curr.strftime("%Y %B %-d")
         curr += datetime.timedelta(days=1) # go on to the next day
 
+def log2datestr(log_title):
+    '''
+    Convert the title of an AfD log page title to its corresponding date
+    string in the format YYYY-MM-DD.
+    '''
+    date_part = log_title[len('Wikipedia:Articles for deletion/Log/'):]
+    return datetime.datetime.strptime(date_part,
+            "%Y %B %d").strftime("%Y-%m-%d")
+
 def print_afd_votes(start=datetime.datetime(2004, 12, 25)):
     '''
     TODO write docstring
     '''
-    for title in title_generator():
+    seen = set()
+    for log in log_generator():
+        logging.info("Doing discussions from %s", log)
+        # Get the list of actual discussions
+        lst = get_afd_list(log, exclude_logs=True)
+        for title in lst:
+            if title not in seen:
+                a = AfD(title)
+                # Nominator counts as a "delete" vote
+                print("\t".join([
+                    a.title,
+                    log2datestr(log),
+                    a.get_nominator(),
+                    "delete"
+                ]))
+                for v, u in a.get_votes():
+                    print("\t".join([
+                        a.title,
+                        log2datestr(log),
+                        u,
+                        v
+                    ]))
+            seen.add(title)
 
 def get_afd_list(title="User:Cyberbot I/Current AfD's", exclude_logs=False,
         lang="en"):
     '''
-    Return a list of AfDs by parsing the wikitext of title.
+    Return a list of AfD titles by parsing the wikitext of title.
 
     The default title string, "User:Cyberbot I/Current AfD's", is just a page
     that lists all the currently-running AfDs. Another page that is useful as a
