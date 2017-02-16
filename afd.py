@@ -13,7 +13,7 @@ Sample usage:
 'Wikipedia:Articles for deletion/1998 Piruetten'
 >>> a.get_nominator()
 'Sportsfan 1234'
->>> afd.votes(a.get_page())
+>>> a.get_votes()
 [(None, 'Gab4gab'), ('keep', 'Hergilei'), ('keep', 'Smartyllama')]
 '''
 
@@ -107,6 +107,9 @@ class AfD(object):
                 params=payload, headers=util.HEADERS)
         j = r.json()
         return j.get('parse', {}).get('wikitext', {}).get('*', "")
+
+    def get_votes(self, normalize=True, lang="en"):
+        return votes(self.get_page(lang), normalize=normalize)
 
 def votes(wikitext, normalize=True):
     '''
