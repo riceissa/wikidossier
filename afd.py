@@ -107,6 +107,23 @@ def votes(wikitext, normalize=True):
             [^[\]]*?\(UTC\)""", wikitext,
             flags=re.VERBOSE|re.IGNORECASE|re.MULTILINE)
     if normalize:
-        # Just some rudimentary normalization for now
-        votes = [(v.lower(), u) for v, u in votes]
+        votes = [(normalize_vote(v), u) for v, u in votes]
     return votes
+
+def normalize_vote(vote):
+    '''
+    Take an AfD vote as a string. Return one of "keep", "delete", "merge",
+    "redirect", or None (for everything else, including comments), in that
+    order of precedence.
+    '''
+    vote = vote.lower()
+    if "keep" in vote:
+        return "keep"
+    if "delete" in vote:
+        return "delete"
+    if "merge" in vote:
+        return "merge"
+    if "redirect" in vote:
+        return "redirect"
+    else:
+        return None
