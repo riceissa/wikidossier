@@ -44,52 +44,62 @@ def get_afd_list(title="User:Cyberbot I/Current AfD's", exclude_logs=False,
                 result.append(t)
     return result
 
-def get_nominator(title, lang="en"):
+class AfD(object):
     '''
-    Return the username of the nominator of the AfD given by title. For the
-    purposes of this function, we assume that "nominator of the AfD" is the
-    same as the user that creates the AfD (i.e. the user that creates the
-    page).
+    Represents an "Articles for deletion" page on Wikipedia.
     '''
-    payload = {
-            'prop': 'revisions',
-            'titles': title,
-            'rvprop': 'user',
-            'rvlimit': 1,       # We only care about the first edit
-            'rvdir': 'newer',   #   to the page
-    }
-    for result in util.query(payload, sleep=0):
-        try:
-            # We only requested one page, so just retrieve that from the mess
-            # of JSON
-            assert len(result['pages']) == 1
-            v = list(result['pages'].values())[0]
+    def __init__(self, title):
+        self.title = title
 
-            # Again, we only requested one revision, so just get the username
-            # from that
-            assert title == v['title']
-            assert len(v['revisions']) == 1
-            return v['revisions'][0]['user']
-        except Exception as e:
-            logging.warning("Something went wrong for page %s; %s: %s",
-                    title, e.__class__.__name__, e)
-            logging.warning(str(result))
+    def __repr__(self):
+        return self.title
 
-def get_page(title, lang="en"):
-    '''
-    Return the wikitext of title.
-    '''
-    payload = {
-            'action': 'parse',
-            'format': 'json',
-            'contentmodel': 'wikitext',
-            'prop': 'wikitext',
-            'page': title,
-    }
-    r = requests.get('http://{}.wikipedia.org/w/api.php'.format(lang),
-            params=payload, headers=util.HEADERS)
-    j = r.json()
-    return j.get('parse', {}).get('wikitext', {}).get('*', "")
+    def get_nominator(self, lang="en"):
+        '''
+        Return the username of the nominator of the AfD given by title. For the
+        purposes of this function, we assume that "nominator of the AfD" is the
+        same as the user that creates the AfD (i.e. the user that creates the
+        page).
+        '''
+        payload = {
+                'prop': 'revisions',
+                'titles': self.title,
+                'rvprop': 'user',
+                'rvlimit': 1,       # We only care about the first edit
+                'rvdir': 'newer',   #   to the page
+        }
+        for result in util.query(payload, sleep=0):
+            try:
+                # We only requested one page, so just retrieve that from the mess
+                # of JSON
+                assert len(result['pages']) == 1
+                v = list(result['pages'].values())[0]
+
+                # Again, we only requested one revision, so just get the username
+                # from that
+                assert self.title == v['title']
+                assert len(v['revisions']) == 1
+                return v['revisions'][0]['user']
+            except Exception as e:
+                logging.warning("Something went wrong for page %s; %s: %s",
+                        self.title, e.__class__.__name__, e)
+                logging.warning(str(result))
+
+    def get_page(self, lang="en"):
+        '''
+        Return the wikitext of title.
+        '''
+        payload = {
+                'action': 'parse',
+                'format': 'json',
+                'contentmodel': 'wikitext',
+                'prop': 'wikitext',
+                'page': self.title,
+        }
+        r = requests.get('http://{}.wikipedia.org/w/api.php'.format(lang),
+                params=payload, headers=util.HEADERS)
+        j = r.json()
+        return j.get('parse', {}).get('wikitext', {}).get('*', "")
 
 def votes(wikitext, normalize=True):
     '''
@@ -107,10 +117,10 @@ def votes(wikitext, normalize=True):
             [^[\]]*?\(UTC\)""", wikitext,
             flags=re.VERBOSE|re.IGNORECASE|re.MULTILINE)
     if normalize:
-        votes = [(normalize_vote(v), u) for v, u in votes]
+        votes = [(normalized_vote(v), u) for v, u in votes]
     return votes
 
-def normalize_vote(vote):
+def normalized_vote(vote):
     '''
     Take an AfD vote as a string. Return one of "keep", "delete", "merge",
     "redirect", or None (for everything else, including comments), in that
