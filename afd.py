@@ -2,6 +2,7 @@ import re
 import requests
 import logging
 import util
+import datetime
 
 '''
 Sample usage:
@@ -16,6 +17,28 @@ Sample usage:
 >>> a.get_votes()
 [(None, 'Gab4gab'), ('keep', 'Hergilei'), ('keep', 'Smartyllama')]
 '''
+
+def title_generator(start=datetime.datetime(2004, 12, 25),
+        end=datetime.datetime.today()):
+    '''
+    Yield a generator that returns all Wikipedia "Articles for deletion" daily
+    log pages in order between start and end (inclusive).
+
+    >>> g = title_generator()
+    >>> next(g)
+    'Wikipedia:Articles for deletion/Log/2004 December 25'
+    '''
+    curr = start
+    while curr <= end:
+        title_prefix = "Wikipedia:Articles for deletion/Log/"
+        yield title_prefix + curr.strftime("%Y %B %-d")
+        curr += datetime.timedelta(days=1) # go on to the next day
+
+def print_afd_votes(start=datetime.datetime(2004, 12, 25)):
+    '''
+    TODO write docstring
+    '''
+    for title in title_generator():
 
 def get_afd_list(title="User:Cyberbot I/Current AfD's", exclude_logs=False,
         lang="en"):
