@@ -18,6 +18,8 @@ Sample usage:
 [(None, 'Gab4gab'), ('keep', 'Hergilei'), ('keep', 'Smartyllama')]
 '''
 
+logging.basicConfig(level=logging.INFO)
+
 def log_generator(start=datetime.datetime(2004, 12, 25),
         end=datetime.datetime.today()):
     '''
@@ -67,7 +69,7 @@ def print_afd_votes(start=datetime.datetime(2004, 12, 25)):
                         a.title,
                         log2datestr(log),
                         u,
-                        v
+                        str(v)
                     ]))
             seen.add(title)
 
@@ -201,3 +203,6 @@ def normalized_vote(vote):
         return "redirect"
     else:
         return None
+
+if __name__ == "__main__":
+    print_afd_votes()
