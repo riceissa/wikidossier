@@ -75,7 +75,7 @@ def query(request, lang="en", sleep=1):
         # last result.
         req.update(lastContinue)
         # Call API
-        r = requests.get('http://{}.wikipedia.org/w/api.php'.format(lang),
+        r = requests.get('https://{}.wikipedia.org/w/api.php'.format(lang),
                 params=req, headers=HEADERS)
         result = r.json()
         logging.info("ON ITERATION %s, SLEEPING FOR %s", iteration, sleep)
