@@ -24,7 +24,10 @@ def main():
 
     for line in args.pagesfile:
         p = line.strip()
-        process_page(p)
+        try:
+            process_page(p)
+        except Exception as e:
+            logging.warning("Could not process %s", p)
 
 def process_page(pagename):
     payload = {
