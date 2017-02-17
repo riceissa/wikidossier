@@ -12,6 +12,19 @@ import util
 # ts_df['ns_str'] = ts_df.ns.map(lambda x: util.NAMESPACES_INV_MAP[x])
 # df = ts_df.set_index(ts_df.index.tz_localize('UTC').tz_convert('US/Pacific'))
 
+def timeseries_df(df, pacific_timezone=False):
+    '''
+    Return a copy of the DataFrame where the "timestamp" column is used as a
+    DatetimeIndex. If pacific_timezone is true, localize the times to the
+    US/Pacific timezone.
+    '''
+    ret = df.copy()
+    ret['timestamp'] = pd.to_datetime(ret['timestamp'])
+    ret = ret.set_index('timestamp').sort_index()
+    if pacific_timezone:
+        ret = ret.set_index(ret.index.tz_localize('UTC').tz_convert('US/Pacific'))
+    return ret
+
 def plot_from(path, user, limit=10000000, minlimit=0):
     lst = []
     with open(path, "r") as f:
