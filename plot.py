@@ -17,10 +17,12 @@ def timeseries_df(df, pacific_timezone=False):
     Return a copy of the DataFrame where the "timestamp" column is used as a
     DatetimeIndex. If pacific_timezone is true, localize the times to the
     US/Pacific timezone.
+
+    Side effect: the original df's "timestamp" column will be converted to
+    datetime objects.
     '''
-    ret = df.copy()
-    ret['timestamp'] = pd.to_datetime(ret['timestamp'])
-    ret = ret.set_index('timestamp').sort_index()
+    df['timestamp'] = pd.to_datetime(df['timestamp'])
+    ret = df.set_index('timestamp').sort_index()
     if pacific_timezone:
         ret = ret.set_index(ret.index.tz_localize('UTC').tz_convert('US/Pacific'))
     return ret
