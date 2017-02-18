@@ -12,6 +12,52 @@ import util
 # ts_df['ns_str'] = ts_df.ns.map(lambda x: util.NAMESPACES_INV_MAP[x])
 # df = ts_df.set_index(ts_df.index.tz_localize('UTC').tz_convert('US/Pacific'))
 
+def ns2color(ns):
+    '''
+    Take namespace as integer and return a string naming a fixed color for that
+    namespace.
+    '''
+    # These colors are from https://tools.wmflabs.org/xtools-ec/ because I use
+    # that tool a lot and it would be confusing to have different colors
+    cs = {
+        0: "#CC0000",
+        1: "#F7B7B7",
+        2: "#5C8D20",
+        3: "#85ED82",
+        4: "#2E97E0",
+        5: "#B9E3F9",
+        6: "#E1711D",
+        7: "#FFC04C",
+        8: "#FDFF98",
+        9: "#5555FF",
+        10: "#55FFFF",
+        11: "#0000C0",
+        12: "#008800",
+        13: "#00C0C0",
+        14: "#FFAFAF",
+        15: "#808080",
+        100: "#75A3D1",
+        101: "#A679D2",
+        108: "",
+        109: "",
+        118: "#99FFFF",
+        119: "#99BBFF",
+        446: "",
+        447: "",
+        710: "",
+        711: "",
+        828: "",
+        829: "",
+        2300: "",
+        2301: "",
+        2302: "",
+        2303: "",
+    }
+    ret = cs.get(ns, "")
+    if ret:
+        return ret
+    return "black"
+
 def timeseries_df(df, pacific_timezone=False):
     '''
     Return a copy of the DataFrame where the "timestamp" column is used as a
@@ -49,6 +95,7 @@ def plot_user_cumsum_sizediff(u):
             ts.sizediff.cumsum().plot(
                     label=util.NAMESPACES_INV_MAP[i],
                     legend=True,
+                    color=ns2color(i),
                     title=u)
     plt.legend(bbox_to_anchor=(0.5, -0.08), loc='upper center', ncol=3)
 
