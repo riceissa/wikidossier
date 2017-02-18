@@ -94,7 +94,7 @@ def get_afd_list(title="User:Cyberbot I/Current AfD's", exclude_logs=False,
             'prop': 'links',
             'page': title,
     }
-    r = requests.get('http://{}.wikipedia.org/w/api.php'.format(lang),
+    r = requests.get('https://{}.wikipedia.org/w/api.php'.format(lang),
             params=payload, headers=util.HEADERS)
     j = r.json()
     result = []
@@ -161,7 +161,7 @@ class AfD(object):
                 'prop': 'wikitext',
                 'page': self.title,
         }
-        r = requests.get('http://{}.wikipedia.org/w/api.php'.format(lang),
+        r = requests.get('https://{}.wikipedia.org/w/api.php'.format(lang),
                 params=payload, headers=util.HEADERS)
         j = r.json()
         return j.get('parse', {}).get('wikitext', {}).get('*', "")
