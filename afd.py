@@ -3,6 +3,7 @@ import requests
 import logging
 import util
 import datetime
+import os.path
 
 '''
 Sample usage:
@@ -50,30 +51,40 @@ def print_afd_votes(start=datetime.datetime(2004, 12, 25)):
     TODO write docstring
     '''
     seen = set()
+    if os.path.isfile("afd_seen.txt"):
+        with open("afd_seen.txt", "r") as f:
+            for line in f:
+                seen.add(line.strip())
     for log in log_generator():
-        logging.info("Doing discussions from %s", log)
-        # Get the list of actual discussions
-        lst = get_afd_list(log, exclude_logs=True)
-        for title in lst:
-            if title not in seen:
-                a = AfD(title)
-                nominator = a.get_nominator()
-                if nominator is not None:
-                    # Nominator counts as a "delete" vote
-                    print("\t".join([
-                        a.title,
-                        log2datestr(log),
-                        nominator,
-                        "delete"
-                    ]))
-                    for v, u in a.get_votes():
+        try:
+            logging.info("Doing discussions from %s", log)
+            # Get the list of actual discussions
+            lst = get_afd_list(log, exclude_logs=True)
+            for title in lst:
+                if title not in seen:
+                    a = AfD(title)
+                    nominator = a.get_nominator()
+                    if nominator is not None:
+                        # Nominator counts as a "delete" vote
                         print("\t".join([
                             a.title,
                             log2datestr(log),
-                            u,
-                            str(v)
+                            nominator,
+                            "delete"
                         ]))
-            seen.add(title)
+                        for v, u in a.get_votes():
+                            print("\t".join([
+                                a.title,
+                                log2datestr(log),
+                                u,
+                                str(v)
+                            ]))
+                seen.add(title)
+            with open("afd_seen.txt", "w") as f:
+                for p in seen:
+                    f.write(p + "\n")
+        except Exception as e:
+            logging.warning("Failed for %s", log)
 
 def get_afd_list(title="User:Cyberbot I/Current AfD's", exclude_logs=False,
         lang="en"):
