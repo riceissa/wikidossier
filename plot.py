@@ -89,6 +89,7 @@ def plot_user_cumsum_sizediff(u, ts_df):
     '''
     Plot the cumulative sum of sizediff as timeseries for user u.
     '''
+    edits = len(ts_df[ts_df.username == u].index)
     for i in ts_df[ts_df.username == u].ns.unique():
         if i < 20:
             ts = ts_df[(ts_df.username == u) & (ts_df.ns == i)]
@@ -96,7 +97,7 @@ def plot_user_cumsum_sizediff(u, ts_df):
                     label=util.NAMESPACES_INV_MAP[i],
                     legend=True,
                     color=ns2color(i),
-                    title=u)
+                    title="{}, {} edits".format(u, edits))
     plt.legend(bbox_to_anchor=(0.5, -0.08), loc='upper center', ncol=3)
 
 def plot_all_users_cumsum_sizediff(ns):
