@@ -85,7 +85,7 @@ def plot_from(path, user, limit=10000000, minlimit=0):
             ", showing {} edits".format(len(plot_lst)))
     plt.show()
 
-def plot_user_cumsum_sizediff(u):
+def plot_user_cumsum_sizediff(u, ts_df):
     '''
     Plot the cumulative sum of sizediff as timeseries for user u.
     '''
