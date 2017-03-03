@@ -4,6 +4,7 @@
 # See also http://stackoverflow.com/a/14257969/3422337
 
 import time
+import os.path
 from threading import Lock
 from flask import Flask, request
 import sys
@@ -50,18 +51,17 @@ def hello(username):
     username = sanitize_username(username)
     if not username:
         return "Invalid username"
-    has_data = False
-    if has_data:
+    data_path = "data/" + username
+    if os.path.exists(data_path):
         # The server has the data stored, so just read it
         pass
     else:
         # The server does not have the data for this user, so query the API for
         # the data
         with lock:
-            res = ""
             for revision in sizediff.process_user(username):
-                res += revision + "\n"
-            return "<pre>" + res + "</pre>"
+                with open(data_path, "a") as f:
+                    f.write(revision + "\n")
     return "Hello, {}! a={}, b={}, c={}".format(username, a, b, c)
 
 def sanitize_username(username):
@@ -73,7 +73,7 @@ def sanitize_username(username):
     username = username.replace("_", " ")
     bad_chars = set(map(chr, range(32)))
     bad_chars = bad_chars.union(set(map(chr, range(127, 161))))
-    bad_chars = bad_chars.union(set(["|", "/", ":"]))
+    bad_chars = bad_chars.union(set(["|", "/", ":", "[", "]", "{", "}"]))
     if set(username).intersection(bad_chars):
         # There were bad chars, so don't continue with this username
         return None
