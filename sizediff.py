@@ -24,7 +24,8 @@ def main():
 
     for line in args.usersfile:
         u = line.strip()
-        process_user(u)
+        for revision in process_user(u):
+            print(revision)
 
 def process_user(username):
     # For parameters, see https://www.mediawiki.org/wiki/API%3aUsercontribs
@@ -37,12 +38,12 @@ def process_user(username):
     for result in util.query(ucpayload, sleep=0):
         for i in result['usercontribs']:
             try:
-                print("\t".join(map(str, [
+                yield "\t".join(map(str, [
                     username,
                     i['ns'],
                     i['timestamp'],
                     i['sizediff'],
-                ])))
+                ]))
             except Exception as e:
                 logging.warning("Something went wrong for user %s; %s: %s",
                         username, e.__class__.__name__, e)
