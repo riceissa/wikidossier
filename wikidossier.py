@@ -8,8 +8,10 @@ import os.path
 from threading import Lock
 from flask import Flask, request
 import sys
+import pandas as pd
 
 import sizediff
+import plot
 
 app = Flask(__name__)
 
@@ -60,9 +62,30 @@ def hello(username):
         # the data
         with lock:
             for revision in sizediff.process_user(username):
+                with open(data_path, "w") as f:
+                    f.write("")
                 with open(data_path, "a") as f:
                     f.write(revision + "\n")
-    return "Hello, {}! a={}, b={}, c={}".format(username, a, b, c)
+    df = pd.read_csv(data_path, sep="\t", header=None,
+            names=["username", "ns", "timestamp", "sizediff"])
+    df = plot.timeseries_df(df)
+    fig_path = "figs/" + username + ".png"
+    plot.plot_user_cumsum_sizediff(username, df, savefig=fig_path)
+    page = """<!DOCTYPE html>
+        <html>
+            <head>
+                <meta charset="utf-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+                <title>result page</title>
+            </head>
+            <body>
+                <h1>info for {}</h1>
+                <p><img src="{}" /></p>
+            </body>
+        </html>
+    """
+    page = page.format(username, fig_path)
+    return page
 
 def sanitize_username(username):
     '''
