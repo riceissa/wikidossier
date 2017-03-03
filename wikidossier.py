@@ -7,6 +7,9 @@ import time
 from threading import Lock
 from flask import Flask, request
 import sys
+
+import sizediff
+
 app = Flask(__name__)
 
 a = 1
@@ -44,9 +47,9 @@ def user_front():
 
 @app.route("/user/<username>")
 def hello(username):
-    # global a
-    global b
-    global c
+    username = sanitize_username(username)
+    if not username:
+        return "Invalid username"
     has_data = False
     if has_data:
         # The server has the data stored, so just read it
@@ -55,11 +58,10 @@ def hello(username):
         # The server does not have the data for this user, so query the API for
         # the data
         with lock:
-            # a += 1
-            print(a, file=sys.stderr)
-            b += a
-            c += b
-            # time.sleep(5) # Simulate long process
+            res = ""
+            for revision in sizediff.process_user(username):
+                res += revision + "\n"
+            return "<pre>" + res + "</pre>"
     return "Hello, {}! a={}, b={}, c={}".format(username, a, b, c)
 
 def sanitize_username(username):
