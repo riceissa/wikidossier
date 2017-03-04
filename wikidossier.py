@@ -3,6 +3,9 @@
 # Modified from http://stackoverflow.com/a/10181810/3422337
 # See also http://stackoverflow.com/a/14257969/3422337
 
+import matplotlib
+matplotlib.use('Agg')
+
 import time
 import os.path
 from threading import Lock
