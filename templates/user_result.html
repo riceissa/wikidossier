@@ -7,6 +7,14 @@
   </head>
   <body>
     <h1>Info for {{ username }}</h1>
+    <h2 id="cumulative-bytes">Cumulative bytes by namespace</h2>
     <p><img src="data:image/png;base64,{{ image_data }}" /></p>
+    <h2 id="other">Other information</h2>
+    <ul>
+      <li><a href="https://tools.wmflabs.org/xtools-ec/?user={{ username }}&amp;project=en.wikipedia.org">Edit count</a></li>
+      <li><a href="https://tools.wmflabs.org/xtools/pages/?user=&amp;project=en.wikipedia.org&amp;namespace=all&amp;redirects=none">Pages created</a></li>
+      <li><a href="https://tools.wmflabs.org/afdstats/afdstats.py?name={{ username }}&amp;max=500&amp;startdate=&amp;altname=">AfD votes</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Special:PrefixIndex/User:{{ username }}/">Subpages</a></li>
+    </ul>
   </body>
 </html>
