@@ -99,6 +99,7 @@ def plot_user_cumsum_sizediff(u, ts_df, figpath=None, figformat=None):
                     color=ns2color(i),
                     title="{}, {} edits".format(u, edits))
     plt.legend(bbox_to_anchor=(0.5, -0.14), loc='upper center', ncol=3)
+    plt.ylabel("Cumulative bytes")
     if figpath and figformat:
         plt.savefig(figpath, format=figformat, bbox_inches="tight")
     plt.clf()
