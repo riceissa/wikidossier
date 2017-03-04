@@ -1,8 +1,5 @@
 #!/usr/bin/python3
 
-# Modified from http://stackoverflow.com/a/10181810/3422337
-# See also http://stackoverflow.com/a/14257969/3422337
-
 import matplotlib
 matplotlib.use('Agg')
 
@@ -20,9 +17,6 @@ import plot
 
 app = Flask(__name__)
 
-a = 1
-b = 2
-c = 3
 lock = Lock()
 
 @app.route("/user", methods=["GET", "POST"])
