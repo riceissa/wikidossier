@@ -85,7 +85,7 @@ def plot_from(path, user, limit=10000000, minlimit=0):
             ", showing {} edits".format(len(plot_lst)))
     plt.show()
 
-def plot_user_cumsum_sizediff(u, ts_df):
+def plot_user_cumsum_sizediff(u, ts_df, figpath=None, figformat=None):
     '''
     Plot the cumulative sum of sizediff as timeseries for user u.
     '''
@@ -99,6 +99,8 @@ def plot_user_cumsum_sizediff(u, ts_df):
                     color=ns2color(i),
                     title="{}, {} edits".format(u, edits))
     plt.legend(bbox_to_anchor=(0.5, -0.08), loc='upper center', ncol=3)
+    if figpath and figformat:
+        plt.savefig(figpath, format=figformat)
 
 def plot_all_users_cumsum_sizediff(ns):
     '''
