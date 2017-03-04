@@ -101,6 +101,8 @@ def sanitize_username(username):
     normalized version of the username. Otherwise return None.
     '''
     username = str(username)
+    if username in [".", ".."]:
+        return None
     username = username.replace("_", " ")
     bad_chars = set(map(chr, range(32)))
     bad_chars = bad_chars.union(set(map(chr, range(127, 161))))
