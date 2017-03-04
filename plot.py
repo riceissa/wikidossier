@@ -101,6 +101,7 @@ def plot_user_cumsum_sizediff(u, ts_df, figpath=None, figformat=None):
     plt.legend(bbox_to_anchor=(0.5, -0.08), loc='upper center', ncol=3)
     if figpath and figformat:
         plt.savefig(figpath, format=figformat)
+    plt.clf()
 
 def plot_all_users_cumsum_sizediff(ns):
     '''
