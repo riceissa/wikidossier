@@ -9,6 +9,8 @@ from threading import Lock
 from flask import Flask, request
 import sys
 import pandas as pd
+import base64
+from io import BytesIO
 
 import sizediff
 import plot
@@ -61,16 +63,19 @@ def hello(username):
         # The server does not have the data for this user, so query the API for
         # the data
         with lock:
+            # Hack to initialize the file so we can append to it
+            with open(data_path, "w") as f:
+                f.write("")
             for revision in sizediff.process_user(username):
-                with open(data_path, "w") as f:
-                    f.write("")
                 with open(data_path, "a") as f:
                     f.write(revision + "\n")
     df = pd.read_csv(data_path, sep="\t", header=None,
             names=["username", "ns", "timestamp", "sizediff"])
     df = plot.timeseries_df(df)
     fig_path = "figs/" + username + ".png"
-    plot.plot_user_cumsum_sizediff(username, df, savefig=fig_path)
+    bio = BytesIO()
+    plot.plot_user_cumsum_sizediff(username, df, figpath=bio, figformat="png")
+    plot_data = base64.encodebytes(bio.getvalue()).decode()
     page = """<!DOCTYPE html>
         <html>
             <head>
@@ -80,11 +85,11 @@ def hello(username):
             </head>
             <body>
                 <h1>info for {}</h1>
-                <p><img src="{}" /></p>
+                <p><img src="data:image/png;base64,{}" /></p>
             </body>
         </html>
     """
-    page = page.format(username, fig_path)
+    page = page.format(username, plot_data)
     return page
 
 def sanitize_username(username):
