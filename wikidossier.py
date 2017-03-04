@@ -9,7 +9,7 @@ matplotlib.use('Agg')
 import time
 import os.path
 from threading import Lock
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, url_for, redirect
 import sys
 import pandas as pd
 import base64
@@ -30,7 +30,7 @@ def user_front():
     if request.method == "POST":
         username = sanitize_username(request.form['username'])
         if username:
-            return hello(username)
+            return redirect(url_for("user_result_page", username=username))
         else:
             return "Invalid username"
     page = """<!DOCTYPE html>
@@ -54,7 +54,7 @@ def user_front():
     return page
 
 @app.route("/user/<username>")
-def hello(username):
+def user_result_page(username):
     username = sanitize_username(username)
     if not username:
         return "Invalid username"
