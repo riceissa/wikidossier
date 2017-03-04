@@ -9,7 +9,7 @@ matplotlib.use('Agg')
 import time
 import os.path
 from threading import Lock
-from flask import Flask, request
+from flask import Flask, request, render_template
 import sys
 import pandas as pd
 import base64
@@ -79,21 +79,8 @@ def hello(username):
     bio = BytesIO()
     plot.plot_user_cumsum_sizediff(username, df, figpath=bio, figformat="png")
     plot_data = base64.encodebytes(bio.getvalue()).decode()
-    page = """<!DOCTYPE html>
-        <html>
-            <head>
-                <meta charset="utf-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-                <title>result page</title>
-            </head>
-            <body>
-                <h1>info for {}</h1>
-                <p><img src="data:image/png;base64,{}" /></p>
-            </body>
-        </html>
-    """
-    page = page.format(username, plot_data)
-    return page
+    return render_template("user_result.html", username=username,
+            image_data=plot_data)
 
 def sanitize_username(username):
     '''
