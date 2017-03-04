@@ -27,25 +27,7 @@ def user_front():
             return redirect(url_for("user_result_page", username=username))
         else:
             return "Invalid username"
-    page = """<!DOCTYPE html>
-        <html>
-            <head>
-                <meta charset="utf-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-                <title>awesome app</title>
-            </head>
-            <body>
-                <h1>Wikidossier</h1>
-                <p>h-hi oniichan, who are you going to make me stalk
-                    today? ;_;</p>
-                <form method="post">
-                    <input type="text" placeholder="Enter valid English Wikipedia username" name="username" style="width: 400px;" autofocus>
-                    <input type="submit" value="stalk ’em!">
-                </form>
-            </body>
-        </html>
-    """
-    return page
+    return render_template("user_front.html")
 
 @app.route("/user/<username>")
 def user_result_page(username):
