@@ -14,6 +14,7 @@ from io import BytesIO
 
 import sizediff
 import plot
+import util
 
 app = Flask(__name__)
 
@@ -81,7 +82,8 @@ def user_compare():
     bio = BytesIO()
     plot.plot_all_users_cumsum_sizediff(df, ns, figpath=bio, figformat="png")
     plot_data = base64.encodebytes(bio.getvalue()).decode()
-    return render_template("user_result.html", username="dummy",
+    return render_template("usercompare.html", usernames=usernames,
+            namespace=util.NAMESPACES_INV_MAP.get(ns),
             image_data=plot_data)
 
 def sanitize_username(username):
