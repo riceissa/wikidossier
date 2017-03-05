@@ -104,7 +104,7 @@ def plot_user_cumsum_sizediff(u, ts_df, figpath=None, figformat=None):
         plt.savefig(figpath, format=figformat, bbox_inches="tight")
     plt.clf()
 
-def plot_all_users_cumsum_sizediff(ns):
+def plot_all_users_cumsum_sizediff(ts_df, ns, figpath=None, figformat=None):
     '''
     Plot the cumulative sum of sizediff as timeseries for namespace ns.
     '''
@@ -112,6 +112,9 @@ def plot_all_users_cumsum_sizediff(ns):
         gcs = g.cumsum()
         gcs.plot(legend=False, label=key)
         plt.text(g.index.values[-1], gcs[-1], key)
+    if figpath and figformat:
+        plt.savefig(figpath, format=figformat, bbox_inches="tight")
+    plt.clf()
 
 def plot_punchcard(df, normalize=None):
     '''
