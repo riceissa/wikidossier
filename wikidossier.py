@@ -52,11 +52,22 @@ def user_result_page(username):
     df = pd.read_csv(data_path, sep="\t", header=None,
             names=["username", "ns", "timestamp", "sizediff"])
     df = plot.timeseries_df(df)
+
+    # Do cumsum plot
     bio = BytesIO()
     plot.plot_user_cumsum_sizediff(username, df, figpath=bio, figformat="png")
-    plot_data = base64.encodebytes(bio.getvalue()).decode()
+    cumsum_plot_data = base64.encodebytes(bio.getvalue()).decode()
+
+    # Do histogram
+    bio = BytesIO()
+    plot.plot_user_sizediff_histogram(username, df,
+            limit=int(request.args.get("hlimit", 10000000)),
+            minlimit=int(request.args.get("hminlimit", 0)),
+            figpath=bio, figformat="png")
+    hist_plot_data = base64.encodebytes(bio.getvalue()).decode()
+
     return render_template("user_result.html", username=username,
-            image_data=plot_data)
+            cumsum_data=cumsum_plot_data, hist_data=hist_plot_data)
 
 @app.route("/usercompare")
 def user_compare():

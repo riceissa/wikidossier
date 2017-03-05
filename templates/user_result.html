@@ -8,7 +8,9 @@
   <body>
     <h1>Info for {{ username }}</h1>
     <h2 id="cumulative-bytes">Cumulative bytes by namespace</h2>
-    <p><img src="data:image/png;base64,{{ image_data }}" /></p>
+    <p><img src="data:image/png;base64,{{ cumsum_data }}" /></p>
+    <h2 id="histogram">Histogram of edits</h2>
+    <p><img src="data:image/png;base64,{{ hist_data }}" /></p>
     <h2 id="other">Other information</h2>
     <ul>
       <li>

@@ -73,17 +73,17 @@ def timeseries_df(df, pacific_timezone=False):
         ret = ret.set_index(ret.index.tz_localize('UTC').tz_convert('US/Pacific'))
     return ret
 
-def plot_from(path, user, limit=10000000, minlimit=0):
-    lst = []
-    with open(path, "r") as f:
-        for line in f:
-            lst.append(int(line.strip()))
-    plot_lst = [i for i in lst if abs(i) < limit and abs(i) > minlimit]
-    plt.hist(plot_lst, bins=50)
-    plt.title(user + " sizediff histogram,\n" + "limit=" + str(limit) +
+def plot_user_sizediff_histogram(username, df, limit=10000000, minlimit=0,
+        figpath=None, figformat=None):
+    u_df = df[(df.username == username) & (df.sizediff < limit)
+            & (df.sizediff > minlimit)]
+    plt.hist(u_df.sizediff, bins=50)
+    plt.title(username + " sizediff histogram,\n" + "limit=" + str(limit) +
             ", minlimit=" + str(minlimit) +
-            ", showing {} edits".format(len(plot_lst)))
-    plt.show()
+            ", showing {} edits".format(len(u_df.sizediff.index)))
+    if figpath and figformat:
+        plt.savefig(figpath, format=figformat, bbox_inches="tight")
+    plt.clf()
 
 def plot_user_cumsum_sizediff(u, ts_df, figpath=None, figformat=None):
     '''
