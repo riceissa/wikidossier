@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Comparing {{ usernames|join(', ') }} in {{ namespace }} space</title>
+  </head>
+  <body>
+    <h1>Comparing {{ usernames|join(', ') }} in {{ namespace }} space</h1>
+    <h2 id="comparison-plot">Comparison plot</h2>
+    <p><img src="data:image/png;base64,{{ image_data }}" /></p>
+
+    {% for username in usernames %}
+    <h2 id="other">Other information for {{ username }}</h2>
+    <ul>
+      <li>
+        <a href="https://en.wikipedia.org/wiki/User:{{ username }}">User page</a>;
+        <a href="https://en.wikipedia.org/wiki/User_talk:{{ username }}">user talk</a>;
+        <a href="https://en.wikipedia.org/wiki/Special:Contributions/{{ username }}">contributions</a>
+      </li>
+      <li><a href="https://tools.wmflabs.org/xtools-ec/?user={{ username }}&amp;project=en.wikipedia.org">Edit count</a></li>
+      <li><a href="https://tools.wmflabs.org/xtools/pages/?user={{ username }}&amp;project=en.wikipedia.org&amp;namespace=all&amp;redirects=none">Pages created</a></li>
+      <li><a href="https://tools.wmflabs.org/afdstats/afdstats.py?name={{ username }}&amp;max=500&amp;startdate=&amp;altname=">AfD votes</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Special:PrefixIndex/User:{{ username }}/">Subpages</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Special:Search?search={{ username }}&amp;prefix=Wikipedia%3AAdministrators'+noticeboard&amp;fulltext=Search&amp;fulltext=Search">Search for {{ username }} on AN/I</a></li>
+      <li><a href="https://encrypted.google.com/search?hl=en&amp;q=%22{{ username }}%22">Search for "{{ username }}" on Google</a></li>
+    </ul>
+    {% endfor %}
+  </body>
+</html>
