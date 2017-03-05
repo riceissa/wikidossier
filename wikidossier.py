@@ -61,8 +61,8 @@ def user_result_page(username):
     # Do histogram
     bio = BytesIO()
     plot.plot_user_sizediff_histogram(username, df,
-            limit=int(request.args.get("hlimit", 10000000)),
-            minlimit=int(request.args.get("hminlimit", 0)),
+            limit=int(request.args.get("hlimit", 10000)),
+            minlimit=int(request.args.get("hminlimit", 100)),
             figpath=bio, figformat="png")
     hist_plot_data = base64.encodebytes(bio.getvalue()).decode()
 
