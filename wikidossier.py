@@ -51,11 +51,37 @@ def user_result_page(username):
     df = pd.read_csv(data_path, sep="\t", header=None,
             names=["username", "ns", "timestamp", "sizediff"])
     df = plot.timeseries_df(df)
-    fig_path = "figs/" + username + ".png"
     bio = BytesIO()
     plot.plot_user_cumsum_sizediff(username, df, figpath=bio, figformat="png")
     plot_data = base64.encodebytes(bio.getvalue()).decode()
     return render_template("user_result.html", username=username,
+            image_data=plot_data)
+
+@app.route("/usercompare")
+def user_compare():
+    usernames = request.args["usernames"].split("|")
+    ns = int(request.args["ns"])
+    # List of valid usernames
+    usernames = list(filter(bool, map(sanitize_username, usernames)))
+    for u in usernames:
+        data_path = "data/" + u
+        if not os.path.exists(data_path):
+            with lock:
+                # Hack to initialize the file so we can append to it
+                with open(data_path, "w") as f:
+                    f.write("")
+                for revision in sizediff.process_user(u):
+                    with open(data_path, "a") as f:
+                        f.write(revision + "\n")
+    df = pd.concat((pd.read_csv("data/" + u, sep="\t", header=None,
+            names=["username", "ns", "timestamp", "sizediff"])
+            for u in usernames))
+    df = plot.timeseries_df(df)
+    df = df[df.ns == ns] # Restrict to namespace of interest
+    bio = BytesIO()
+    plot.plot_all_users_cumsum_sizediff(df, ns, figpath=bio, figformat="png")
+    plot_data = base64.encodebytes(bio.getvalue()).decode()
+    return render_template("user_result.html", username="dummy",
             image_data=plot_data)
 
 def sanitize_username(username):
