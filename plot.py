@@ -75,8 +75,8 @@ def timeseries_df(df, pacific_timezone=False):
 
 def plot_user_sizediff_histogram(username, df, limit=10000000, minlimit=0,
         figpath=None, figformat=None):
-    u_df = df[(df.username == username) & (df.sizediff < limit)
-            & (df.sizediff > minlimit)]
+    u_df = df[(df.username == username) & (df.sizediff.abs() < limit)
+            & (df.sizediff.abs() > minlimit)]
     plt.hist(u_df.sizediff, bins=50)
     plt.title(username + " sizediff histogram,\n" + "limit=" + str(limit) +
             ", minlimit=" + str(minlimit) +
