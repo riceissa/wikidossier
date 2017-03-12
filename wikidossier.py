@@ -120,14 +120,11 @@ def user_compare():
                     values (?, ?, ?, ?)""",
                     revision)
             db.commit()
-    # db = get_db()
-    # df = pd.read_sql("select * from usercontribs where username = ?", db,
-    #         params=(username,))
-    df = pd.concat((pd.read_csv("data/" + u, sep="\t", header=None,
-            names=["username", "ns", "timestamp", "sizediff"])
-            for u in usernames))
+    db = get_db()
+    df = pd.concat((pd.read_sql("""select * from usercontribs
+        where username = ? and ns = ?""", db,
+        params=(u, ns)) for u in usernames))
     df = plot.timeseries_df(df)
-    df = df[df.ns == ns] # Restrict to namespace of interest
     bio = BytesIO()
     plot.plot_all_users_cumsum_sizediff(df, ns, figpath=bio, figformat="png")
     plot_data = base64.encodebytes(bio.getvalue()).decode()
