@@ -38,12 +38,12 @@ def process_user(username):
     for result in util.query(ucpayload, sleep=0):
         for i in result['usercontribs']:
             try:
-                yield "\t".join(map(str, [
-                    username,
-                    i['ns'],
-                    i['timestamp'],
-                    i['sizediff'],
-                ]))
+                yield (
+                    str(username),
+                    int(i['ns']),
+                    str(i['timestamp']),
+                    int(i['sizediff']),
+                )
             except Exception as e:
                 logging.warning("Something went wrong for user %s; %s: %s",
                         username, e.__class__.__name__, e)
