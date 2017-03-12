@@ -39,6 +39,7 @@ def process_user(username):
         for i in result['usercontribs']:
             try:
                 yield (
+                    int(i['revid']),
                     str(username),
                     int(i['ns']),
                     str(i['timestamp']),
