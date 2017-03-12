@@ -70,21 +70,38 @@ def user_front():
             return "Invalid username"
     return render_template("user_front.html")
 
+def fetch_sizediff_data(db, username):
+    """
+    Fetch new sizediff data from the upstream API, for the user username into
+    the sqlite database db.
+    """
+    cur = db.execute("""select revid from usercontribs
+            where username = ? order by revid desc limit 1""", (username,))
+    try:
+        db_rev = cur.fetchall()[0]["revid"]
+    except:
+        print("User not in db, so setting db revid to 0", file=sys.stderr)
+        db_rev = 0
+    print("DB REVID is", db_rev, file=sys.stderr)
+    for revision in sizediff.process_user(username):
+        curr_rev = revision[0]
+        if curr_rev > db_rev:
+            db.execute("""insert into usercontribs
+                (revid, username, ns, timestamp, sizediff)
+                values (?, ?, ?, ?, ?)""",
+                revision)
+        else:
+            break
+    db.commit()
+
 @app.route("/user/<username>")
 def user_result_page(username):
     username = sanitize_username(username)
     if not username:
         return "Invalid username"
     # This user isn't in the database, so retrieve from upstream API
-    if True: # TODO fix
-        db = get_db()
-        for revision in sizediff.process_user(username):
-            db.execute("""insert into usercontribs
-                (revid, username, ns, timestamp, sizediff)
-                values (?, ?, ?, ?, ?)""",
-                revision)
-        db.commit()
     db = get_db()
+    fetch_sizediff_data(db, username)
     df = pd.read_sql("select * from usercontribs where username = ?", db,
             params=(username,))
     df = plot.timeseries_df(df)
