@@ -3,3 +3,4 @@
 *.gz
 *.xz
 wikidossier.db
+__pycache__
