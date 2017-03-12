@@ -4,3 +4,4 @@
 *.xz
 wikidossier.db
 __pycache__
+user-agent.txt
