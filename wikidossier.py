@@ -6,8 +6,9 @@ matplotlib.use('Agg')
 import time
 import os.path
 from threading import Lock
-from flask import Flask, request, render_template, url_for, redirect
+from flask import Flask, request, render_template, url_for, redirect, g
 import sys
+import sqlite3
 import pandas as pd
 import base64
 from io import BytesIO
@@ -16,9 +17,48 @@ import sizediff
 import plot
 import util
 
+DATABASE = "wikidossier.db"
+
 app = Flask(__name__)
 
 lock = Lock()
+
+# From http://flask.pocoo.org/docs/0.12/tutorial/setup/
+def connect_db():
+    """Connects to the specific database."""
+    rv = sqlite3.connect(app.config['DATABASE'])
+    rv.row_factory = sqlite3.Row
+    return rv
+
+# From http://flask.pocoo.org/docs/0.12/tutorial/dbinit/
+def init_db():
+    db = get_db()
+    with app.open_resource('schema.sql', mode='r') as f:
+        db.cursor().executescript(f.read())
+    db.commit()
+
+# From http://flask.pocoo.org/docs/0.12/tutorial/dbinit/
+@app.cli.command('initdb')
+def initdb_command():
+    """Initializes the database."""
+    init_db()
+    print('Initialized the database.')
+
+# From http://flask.pocoo.org/docs/0.12/tutorial/dbcon/
+def get_db():
+    """Opens a new database connection if there is none yet for the
+    current application context.
+    """
+    if not hasattr(g, 'sqlite_db'):
+        g.sqlite_db = connect_db()
+    return g.sqlite_db
+
+# From http://flask.pocoo.org/docs/0.12/tutorial/dbcon/
+@app.teardown_appcontext
+def close_db(error):
+    """Closes the database again at the end of the request."""
+    if hasattr(g, 'sqlite_db'):
+        g.sqlite_db.close()
 
 @app.route("/user", methods=["GET", "POST"])
 def user_front():
