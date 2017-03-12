@@ -80,8 +80,8 @@ def user_result_page(username):
         db = get_db()
         for revision in sizediff.process_user(username):
             db.execute("""insert into usercontribs
-                (username, ns, timestamp, sizediff)
-                values (?, ?, ?, ?)""",
+                (revid, username, ns, timestamp, sizediff)
+                values (?, ?, ?, ?, ?)""",
                 revision)
         db.commit()
     db = get_db()
@@ -116,8 +116,8 @@ def user_compare():
             db = get_db()
             for revision in sizediff.process_user(u):
                 db.execute("""insert into usercontribs
-                    (username, ns, timestamp, sizediff)
-                    values (?, ?, ?, ?)""",
+                    (revid, username, ns, timestamp, sizediff)
+                    values (?, ?, ?, ?, ?)""",
                     revision)
             db.commit()
     db = get_db()
