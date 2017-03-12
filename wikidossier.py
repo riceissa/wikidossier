@@ -26,7 +26,7 @@ lock = Lock()
 # From http://flask.pocoo.org/docs/0.12/tutorial/setup/
 def connect_db():
     """Connects to the specific database."""
-    rv = sqlite3.connect(app.config['DATABASE'])
+    rv = sqlite3.connect(DATABASE)
     rv.row_factory = sqlite3.Row
     return rv
 
@@ -76,21 +76,20 @@ def user_result_page(username):
     if not username:
         return "Invalid username"
     data_path = "data/" + username
-    if os.path.exists(data_path):
-        # The server has the data stored, so just read it
-        pass
-    else:
-        # The server does not have the data for this user, so query the API for
-        # the data
-        with lock:
-            # Hack to initialize the file so we can append to it
-            with open(data_path, "w") as f:
-                f.write("")
-            for revision in sizediff.process_user(username):
-                with open(data_path, "a") as f:
-                    f.write(revision + "\n")
-    df = pd.read_csv(data_path, sep="\t", header=None,
-            names=["username", "ns", "timestamp", "sizediff"])
+    # This user isn't in the database, so retrieve from upstream API
+    if True:
+        db = get_db()
+        for revision in sizediff.process_user(username):
+            db.execute("""insert into usercontribs
+                (username, ns, timestamp, sizediff)
+                values (?, ?, ?, ?)""",
+                revision)
+        db.commit()
+    db = get_db()
+    df = pd.read_sql("select * from usercontribs where username = ?", db,
+            params=(username,))
+    # df = pd.read_csv(data_path, , header=None,
+    #         names=["username", "ns", "timestamp", "sizediff"])
     df = plot.timeseries_df(df)
 
     # Do cumsum plot
