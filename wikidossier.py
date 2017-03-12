@@ -75,9 +75,8 @@ def user_result_page(username):
     username = sanitize_username(username)
     if not username:
         return "Invalid username"
-    data_path = "data/" + username
     # This user isn't in the database, so retrieve from upstream API
-    if True:
+    if True: # TODO fix
         db = get_db()
         for revision in sizediff.process_user(username):
             db.execute("""insert into usercontribs
@@ -113,15 +112,17 @@ def user_compare():
     # List of valid usernames
     usernames = list(filter(bool, map(sanitize_username, usernames)))
     for u in usernames:
-        data_path = "data/" + u
-        if not os.path.exists(data_path):
-            with lock:
-                # Hack to initialize the file so we can append to it
-                with open(data_path, "w") as f:
-                    f.write("")
-                for revision in sizediff.process_user(u):
-                    with open(data_path, "a") as f:
-                        f.write(revision + "\n")
+        if True: # TODO this should be "if user doesn't exist"
+            db = get_db()
+            for revision in sizediff.process_user(u):
+                db.execute("""insert into usercontribs
+                    (username, ns, timestamp, sizediff)
+                    values (?, ?, ?, ?)""",
+                    revision)
+            db.commit()
+    # db = get_db()
+    # df = pd.read_sql("select * from usercontribs where username = ?", db,
+    #         params=(username,))
     df = pd.concat((pd.read_csv("data/" + u, sep="\t", header=None,
             names=["username", "ns", "timestamp", "sizediff"])
             for u in usernames))
