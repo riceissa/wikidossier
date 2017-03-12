@@ -14,7 +14,7 @@
   keep, delete, merge, whatever – and *u* is the user that cast the vote).
 * `plot.py`: This script takes the data collected using the other scripts and
   plots them.
-* `print_page.py`: TODO say something about this.
+* `wikidossier.py`: The main Flask app
 
 ## Notes
 
