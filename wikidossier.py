@@ -99,7 +99,6 @@ def user_result_page(username):
     username = sanitize_username(username)
     if not username:
         return "Invalid username"
-    # This user isn't in the database, so retrieve from upstream API
     db = get_db()
     fetch_sizediff_data(db, username)
     df = pd.read_sql("select * from usercontribs where username = ?", db,
