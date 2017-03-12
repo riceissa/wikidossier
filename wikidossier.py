@@ -128,16 +128,9 @@ def user_compare():
     ns = int(request.args["ns"])
     # List of valid usernames
     usernames = list(filter(bool, map(sanitize_username, usernames)))
-    for u in usernames:
-        if True: # TODO this should be "if user doesn't exist"
-            db = get_db()
-            for revision in sizediff.process_user(u):
-                db.execute("""insert into usercontribs
-                    (revid, username, ns, timestamp, sizediff)
-                    values (?, ?, ?, ?, ?)""",
-                    revision)
-            db.commit()
     db = get_db()
+    for u in usernames:
+        fetch_sizediff_data(db, u)
     df = pd.concat((pd.read_sql("""select * from usercontribs
         where username = ? and ns = ?""", db,
         params=(u, ns)) for u in usernames))
