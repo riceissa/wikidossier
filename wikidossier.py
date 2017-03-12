@@ -88,8 +88,6 @@ def user_result_page(username):
     db = get_db()
     df = pd.read_sql("select * from usercontribs where username = ?", db,
             params=(username,))
-    # df = pd.read_csv(data_path, , header=None,
-    #         names=["username", "ns", "timestamp", "sizediff"])
     df = plot.timeseries_df(df)
 
     # Do cumsum plot
