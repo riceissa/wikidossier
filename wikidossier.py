@@ -60,6 +60,12 @@ def close_db(error):
     if hasattr(g, 'sqlite_db'):
         g.sqlite_db.close()
 
+
+@app.route("/")
+def homepage():
+    return render_template("homepage.html")
+
+
 @app.route("/user", methods=["GET", "POST"])
 def user_front():
     if request.method == "POST":
