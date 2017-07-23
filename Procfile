@@ -1,1 +1,1 @@
-web: uwsgi --ini wikidossier.ini --http :$PORT
+web: (FLASK_APP=wikidossier.py python3 -m flask initdb  ; uwsgi --ini wikidossier.ini --http :$PORT)
