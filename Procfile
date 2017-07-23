@@ -1,1 +1,1 @@
-web: wsgi --ini wikidossier.ini
+web: uwsgi --ini wikidossier.ini
