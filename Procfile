@@ -1,1 +1,1 @@
-web: uwsgi --ini wikidossier.ini
+web: uwsgi --ini wikidossier.ini --http :$PORT
