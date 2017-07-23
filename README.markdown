@@ -1,5 +1,11 @@
 # Wikidossier – Tools to stalk Wikipedia users and pages
 
+You can see the app deployed on Heroku.
+For example:
+
+- <https://wikidossier.herokuapp.com/user/Riceissa>
+- <https://wikidossier.herokuapp.com/usercompare?usernames=Vipul|Riceissa|Ethanbas&ns=0>
+
 ## List of scripts
 
 * `sizediff.py`: This script uses the MediaWiki API to obtain revisions by
