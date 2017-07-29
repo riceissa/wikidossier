@@ -100,7 +100,7 @@ def fetch_sizediff_data(db, username):
                 revision)
         else:
             break
-    print("Finished inserting %d revisions into db", numRevisionsInserted)
+    print("Finished inserting " + numRevisionsInserted + " revisions into db")
     db.commit()
 
 @app.route("/user/<username>")
