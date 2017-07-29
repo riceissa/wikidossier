@@ -6,3 +6,4 @@ wikidossier.db
 __pycache__
 user-agent.txt
 logs/
+wikidossier.db-journal

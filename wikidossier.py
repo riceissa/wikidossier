@@ -89,15 +89,18 @@ def fetch_sizediff_data(db, username):
         print("User not in db, so setting db revid to 0", file=sys.stderr)
         db_rev = 0
     print("DB REVID is", db_rev, file=sys.stderr)
+    numRevisionsInserted = 0
     for revision in sizediff.process_user(username):
         curr_rev = revision[0]
         if curr_rev > db_rev:
+            numRevisionsInserted += 1
             db.execute("""insert into usercontribs
                 (revid, username, ns, timestamp, sizediff)
                 values (?, ?, ?, ?, ?)""",
                 revision)
         else:
             break
+    print("Finished inserting %d revisions into db", numRevisionsInserted)
     db.commit()
 
 @app.route("/user/<username>")

@@ -7,6 +7,8 @@ import os.path
 import logging
 from itertools import zip_longest
 
+logging.basicConfig(level=logging.DEBUG)
+
 ua_file = "user-agent.txt"
 if os.path.isfile(ua_file):
     with open(ua_file, "r") as f:
