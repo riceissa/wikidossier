@@ -11,8 +11,9 @@ For example:
 For testing/development:
 
 ```bash
-flask initdb
-flask run
+$ flask initdb
+$ flask run
+# echo "type the user agent you want to use here" > user-agent.txt
 # Then just visit http://127.0.0.1:5000/
 # (or whatever the terminal output says) in your browser
 ```
