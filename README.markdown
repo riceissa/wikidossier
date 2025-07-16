@@ -6,6 +6,19 @@ For example:
 - <https://wikidossier.herokuapp.com/user/Riceissa>
 - <https://wikidossier.herokuapp.com/usercompare?usernames=Vipul|Riceissa|Ethanbas&ns=0>
 
+## Usage
+
+For testing/development:
+
+```bash
+flask initdb
+flask run
+# Then just visit http://127.0.0.1:5000/
+# (or whatever the terminal output says) in your browser
+```
+
+For deployment on the server: (idk, it's been many years and i forgot how to do this.)
+
 ## List of scripts
 
 * `sizediff.py`: This script uses the MediaWiki API to obtain revisions by
